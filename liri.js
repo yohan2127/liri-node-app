@@ -4,6 +4,18 @@ var Spotify = require('node-spotify-api');
 var createTable = require('console.table');
 var request = require('request');
 var moment = require('moment');
+var NodeGeocoder = require('node-geocoder');
+ 
+var options = {
+  provider: 'google',
+ 
+  // Optional depending on the providers
+  httpAdapter: 'https', // Default
+  apiKey: process.env.GOOGLE_ADDRESS, // for Mapquest, OpenCage, Google Premier
+  formatter: null         // 'gpx', 'string', ...
+};
+ 
+var geocoder = NodeGeocoder(options)
 
 
 
@@ -24,13 +36,16 @@ if (process.argv[2] == 'concert-this' ) {
 
     request(queryURL, function (error, response, body) {
         if (error) console.log(error);
-        var result  =  JSON.parse(body)[0];        
+        var result  =  JSON.parse(body)[0]; 
+        //console.log(result);       
         console.log("Venue name:  " + result.venue.name);
+        geocoder.reverse({lat:result.venue.latitude, lon:result.venue.longitude}, function(err, res) {
+            console.log("Concert adress:  " + res[0].formattedAddress);
+          });
         console.log("Venue location:  " + result.venue.city+ ", " + result.venue.region+ ", "+ result.venue.country);
         console.log("Event Date:  " +  moment(result.datetime).format("MM/DD/YYYY"));
        
-
-
+        
     });
   
 } else if ( process.argv[2] == 'spotify-this-song') {
