@@ -24,10 +24,10 @@ if (process.argv[2] == 'concert-this' ) {
 
     request(queryURL, function (error, response, body) {
         if (error) console.log(error);
-        var result  =  JSON.parse(body)[0];
-        console.log("Venue name " + result.venue.name);
-        console.log("Venue location " + result.venue.city);
-        console.log("Date of Event " +  moment(result.datetime).format("MM/DD/YYYY"));
+        var result  =  JSON.parse(body)[0];        
+        console.log("Venue name:  " + result.venue.name);
+        console.log("Venue location:  " + result.venue.city+ ", " + result.venue.region+ ", "+ result.venue.country);
+        console.log("Event Date:  " +  moment(result.datetime).format("MM/DD/YYYY"));
        
 
 
